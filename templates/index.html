@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        /* Default button styling */
+        button {
+            background-color: #007bff; /* Default button color */
+        }
+
+        /* Hover effect for default button */
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Specific styling for the "Generate QR Code" button */
+        .generate-button {
+            background: linear-gradient(135deg, #f06, #ffba00); /* Colorful gradient */
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Hover effect for "Generate QR Code" button */
+        .generate-button:hover {
+            background: linear-gradient(135deg, #ffba00, #f06); /* Reversed gradient */
+            transform: scale(1.05);
+        }
+
+        button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>QR Code Generator</h1>
+    <form method="POST" action="/">
+        <label for="mobile_number">Mobile Number:</label>
+        <input type="text" id="mobile_number" name="mobile_number" pattern="\d{10}" placeholder="Connect me" required><br><br>
+        
+        
+        <input type="submit" value="Generate QR Code" class="generate-button">
+    </form>
+
+    {% if qr_code_img %}
+    <h2>Your QR Code:</h2>
+    <img src="data:image/png;base64,{{ qr_code_img }}" alt="QR Code"><br><br>
+
+    <form method="POST" action="/download">
+        <!-- Hidden input to retain data for QR code regeneration on download -->
+        <input type="hidden" name="mobile_number" value="{{ request.form.mobile_number }}">
+        <button type="submit">Download QR Code</button>
+    </form>
+    {% endif %}
+</body>
+</html>
